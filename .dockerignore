@@ -1,0 +1,8 @@
+Dockerfile
+docker-compose.yml
+.git/
+__pycache__
+.gitignore
+.coverage
+htmlcov
+*.py[oc]

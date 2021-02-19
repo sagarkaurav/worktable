@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worktable</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='public/css/build/styles.css') }}">
+</head>
+
+<body>
+    <div class="min-h-screen p-8 bg-blue-50">
+        {% include 'layouts/partials/nav.html' %}
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,24 @@
+# Ignore Python cache
+*.pyc
+.pytest_cache/
+__pycache__
+
+# Ignore virtual enviornment
+.venv
+
+# Ignore sqlite database
+*.db
+
+# Ignore coverage files
+.coverage
+htmlcov
+
+
+# Keep .gitkeep it git history to keep track of empty directory  
+!.gitkeep
+
+# Ignore node modules
+node_modules
+
+# Ignore build css 
+app/static/public/css/build/

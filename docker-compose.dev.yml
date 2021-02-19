@@ -1,0 +1,35 @@
+version: '3.4'
+
+services:
+  app:
+    image: worktable
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+      args:
+        ALLOW_SUDO: "true"
+    environment:
+      - FLASK_DEBUG=1
+      - FLASK_ENV=development
+      - DATABASE_URL=postgresql://worktable:worktable@db/worktable
+    volumes:
+      - .:/usr/src/app
+    ports:
+     - "5000:5000"
+    entrypoint: ["./dev-entrypoint.sh"]
+    command: ["flask", "run", "--host", "0.0.0.0"]
+    depends_on:
+      - db
+  
+  db:
+    image: postgres:13.0
+    environment:
+      - POSTGRES_USER=worktable
+      - POSTGRES_PASSWORD=worktable
+      - POSTGRES_DB=worktable
+    volumes:
+      - worktable-db:/var/lib/postgresql/data
+    ports: 
+      - "5001:5432"
+volumes: 
+  worktable-db:
