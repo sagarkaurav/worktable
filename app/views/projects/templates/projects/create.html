@@ -1,0 +1,62 @@
+{% extends 'layouts/layout.html' %}
+{% block content %}
+<form id="new-post-form" action="{{ url_for('.create', org_username=current_user.organization.username) }}"
+    method="POST">
+    {{ form.csrf_token}}
+
+    <div class="px-12 py-8">
+        <div class="max-w-3xl p-4 mx-auto rounded-lg shadow-sm bg-gray-50">
+            <label class="block px-3 mb-6">
+                <span class="block mb-2 ml-2 font-bold text-blue-gray-600">{{ form.name.label.name }}</span>
+                {% if form.name.errors %}
+                {{form.name(class="w-full border-2 border-red-300 rounded-lg", autofocus=true,
+                placeholder="New project")}}
+
+                {% for error in form.name.errors %}
+                <p class="text-xs font-bold text-red-400">{{error}}</p>
+                {% endfor %}
+                {% else %}
+                {{form.name(class="w-full border-2 border-gray-300 rounded-lg", autofocus=true,
+                placeholder="New project")}}
+                {% endif %}
+            </label>
+            {{ form.description(id="description-data") }}
+            <div id="editorjs" class="px-5 mb-8">
+            </div>
+            {% for error in form.description.errors %}
+            <p class="text-xs font-bold text-red-400">{{error}}</p>
+            {% endfor %}
+            <div class="flex">
+                <button type="button" id="publish-btn"
+                    class="px-4 py-2 mx-auto font-bold text-white bg-green-500 rounded-lg">Publish</button>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+<script>
+    window.addEventListener('load', function () {
+        let editor;
+        {% if form.description.data %}
+            editor = new EditorJS({
+                placeholder: 'Type project description here',
+                data: {{form.description.data | safe }}
+            });
+        
+        {%else%}
+        editor = new EditorJS({
+                placeholder: 'Type project description here',
+            });
+        {%  endif %}
+    let newPostForm = document.getElementById('new-post-form');
+    let descData = document.getElementById('description-data');
+    let publishBtn = document.getElementById('publish-btn');
+    publishBtn.addEventListener('click', function () {
+        let desc = editor.save().then(function (data) {
+            descData.value = JSON.stringify(data);
+            newPostForm.submit();
+        });
+    });
+    });
+</script>
+{% endblock content %}

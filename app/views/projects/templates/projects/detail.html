@@ -1,0 +1,98 @@
+{% extends 'layouts/layout.html' %}
+{% block content %}
+<div class="justify-center lg:flex">
+    <div class="flex-grow max-w-3xl px-12 py-8">
+        <div class="p-4 rounded-lg bg-gray-50">
+            <h1 class="py-4 text-2xl font-bold text-center">{{ project.name }}</h1>
+            <div id="editorjs" class="mt-4">
+            </div>
+            <div class="flex items-center justify-between mt-8">
+                <div class="flex items-center">
+                    <img class="w-8 h-8 rounded-full"
+                        src="https://pbs.twimg.com/profile_images/1205060168423100422/7CdEj_dt_400x400.jpg"
+                        alt="avatar" />
+                    <button class="ml-2 text-xs text-gray-400 hover:font-bold hover:text-gray-600">add
+                        member</button>
+                </div>
+                {% if project.updated_at %}
+                <div class="text-xs text-gray-500">last modified {{ project.updated_at }}</div>
+                {% else %}
+                <div class="text-xs text-gray-500">Created at {{ project.created_at }}</div>
+                {% endif %}
+            </div>
+        </div>
+        {% if comments %}
+        {% for comment in comments.items %}
+        <div class="p-4 mt-4 rounded-lg bg-gray-50">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <img class="w-8 h-8 rounded-full"
+                        src="https://pbs.twimg.com/profile_images/1205060168423100422/7CdEj_dt_400x400.jpg"
+                        alt="avatar" />
+                    <p class="font-semibold">{{ comment.owner.first_name }} {{ comment.owner.last_name }}</p>
+                </div>
+                <div class="text-xs text-gray-500">{{ comment.created_at }}</div>
+            </div>
+            <div id="{{comment.public_id}}" data-description='{{comment.description | safe}}' class="mt-4 comments">
+            </div>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <form id="new-comment-form" method="POST" action="{{url_for('.detail', org_username=current_user.organization.username, project_id=project.public_id)}}">
+        {{ form.csrf_token }}
+            <div class="p-4 mt-4 rounded-lg bg-gray-50">
+            <div id="comment-editor">
+            </div>
+            {{ form.description(id="description-data") }}
+            {% for error in form.description.errors %}
+            <p class="text-xs font-bold text-red-400">{{error}}</p>
+            {% endfor %}
+            <button id="new-comment-btn" class="p-2 mt-4 text-sm font-bold text-white bg-green-500 rounded-lg hover:bg-green-600">New
+                comment</button>
+        </div>
+        </form>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+<script>
+    let data = {{ project.description | safe }}
+    const editor = new EditorJS({
+        readOnly: true,
+        data: data,
+    });
+    let commentEditor;
+    {% if form.description.data %}
+    commentEditor = new EditorJS({
+            placeholder: 'Write new comment',
+            data: {{form.description.data | safe }},
+            'holder': 'comment-editor'
+        });
+    
+    {%else%}
+    commentEditor = new EditorJS({
+            placeholder: 'Write new comment',
+            'holder': 'comment-editor'
+        });
+    {%  endif %}
+
+    let newCommentForm = document.getElementById('new-comment-form');
+    let newCommentBtn = document.getElementById('new-comment-btn');
+    let newCommentField = document.getElementById('description-data');
+    newCommentBtn.addEventListener('click', function(){
+        commentEditor.save().then(function(data){
+            newCommentField.value = JSON.stringify(data);
+            newCommentForm.submit();
+        });
+    });
+
+    let comments = document.getElementsByClassName("comments");
+    for(let i = 0; i < comments.length; i++) {
+        console.log(comments[i].getAttribute("data-description"));
+        new EditorJS({
+            readOnly: true,
+            data: JSON.parse(comments[i].getAttribute("data-description")),
+            holder: comments[i].getAttribute("id")
+        });
+    }
+</script>
+{% endblock content %}
