@@ -1,6 +1,6 @@
 from app import db
-from app.models import Project
-from flask import Blueprint, abort, redirect, render_template, request, url_for
+from app.models import MemberProject, Project
+from flask import Blueprint, abort, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
 from .forms import CreateComment, CreateProject
@@ -16,8 +16,10 @@ def create(org_username):
         project = Project(
             name=new_project.name.data,
             description=new_project.description.data,
-            owner=current_user,
+            created_by_id=current_user.id,
         )
+        permission = MemberProject(member=current_user)
+        project.permissions.append(permission)
         db.session.add(project)
         db.session.commit()
         return redirect(
@@ -29,24 +31,26 @@ def create(org_username):
 @projects.route("/<project_id>/", subdomain="<org_username>", methods=["GET", "POST"])
 @login_required
 def detail(org_username, project_id):
-    project = Project.query.filter_by(
-        owner=current_user, public_id=project_id, project_id=None
-    ).first()
+    project = (
+        Project.query.filter(Project.members.any(id=current_user.id))
+        .filter_by(public_id=project_id, project_id=None)
+        .first()
+    )
     if project is None:
         abort(404)
     new_comment = CreateComment()
     if new_comment.validate_on_submit():
         comment = Project(
-            name="",
             description=new_comment.description.data,
-            owner=current_user,
             project=project,
+            created_by_id=current_user.id,
         )
-        new_comment = CreateComment()
+        permission = MemberProject(member=current_user)
+        comment.permissions.append(permission)
+        db.session.add(comment)
         db.session.add(comment)
         db.session.commit()
-    page = request.args.get("page", 1)
-    comments = Project.query.filter_by(project=project).paginate(page, 10)
-    return render_template(
-        "projects/detail.html", project=project, comments=comments, form=new_comment
-    )
+        return redirect(
+            url_for(".detail", org_username=org_username, project_id=project_id)
+        )
+    return render_template("projects/detail.html", project=project, form=new_comment)

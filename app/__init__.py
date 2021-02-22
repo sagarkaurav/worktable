@@ -14,7 +14,7 @@ def create_app(config="app.config.ProductionConfig"):
     login_manager.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db, directory="app/db/migrations", compare_type=True)
-    from app.models import Member, Organization, Project  # noqa F401
+    from app.models import Member, MemberProject, Organization, Project  # noqa F401
     from app.views.auth import auth
     from app.views.dashboard import dashboard
     from app.views.home import home

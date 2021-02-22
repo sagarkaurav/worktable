@@ -10,7 +10,8 @@ dash = Blueprint("dashboard", __name__, template_folder="templates")
 def index(org_username):
     page = request.args.get("page", 1)
     projects = (
-        Project.query.filter_by(owner=current_user, project_id=None)
+        Project.query.filter(Project.permissions.any(member=current_user))
+        .filter_by(project_id=None)
         .order_by(Project.id.desc())
         .paginate(int(page), 3)
     )

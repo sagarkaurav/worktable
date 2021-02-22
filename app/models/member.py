@@ -19,7 +19,9 @@ class Member(UserMixin, db.Model):
         db.Integer, db.ForeignKey("organizations.id", ondelete="CASCADE")
     )
     organization = db.relationship(
-        "Organization", backref=db.backref("members", passive_deletes=True)
+        "Organization",
+        backref=db.backref("members", passive_deletes=True),
+        lazy="joined",
     )
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=True)
