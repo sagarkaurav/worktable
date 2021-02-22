@@ -1,0 +1,40 @@
+{% extends 'layouts/layout.html' %}
+{% block content %}
+<div class="px-12 py-8">
+    <div class="p-4 rounded-lg bg-gray-50">
+        <svg class="w-16 h-16 p-4 mx-auto -mt-10 text-green-500 rounded-full bg-gray-50"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+        </svg>
+        <div class="relative mb-2">
+            <a href="{{ url_for('members.invite', org_username=current_user.organization.username) }}"
+                class="absolute right-0 px-2 py-1 text-sm font-bold text-white bg-green-500 rounded-lg hover:bg-green-600">Invite
+                Member</a>
+            <h6 class="pb-4 text-xl font-bold text-center">Members</h6>
+        </div>
+        <div class="grid grid-cols-1 gap-4 mb-4 text-sm md:grid-cols-2 lg:grid-cols-4">
+            {% for member in members.items %}
+            {% include 'members/partials/member.html' %}
+            {% endfor %}
+        </div>
+        <div class="flex items-center justify-end mt-4">
+            <div class="flex items-center">
+                <p class="mr-2 text-sm text-gray-500">showing page {{ members.page }} of {{ members.pages }}</p>
+                {% if members.has_prev %}
+                <a href="{{ url_for('.index', org_username=current_user.organization.username, member_page=members.prev_num) }}"
+                    class="px-2 py-1 border hover:font-bold">Previous</a>
+                {% else %}
+                <button disabled class="px-2 py-1 border hover:font-bold">Previous</button>
+                {% endif %}
+                {% if members.has_next %}
+                <a href="{{ url_for('.index', org_username=current_user.organization.username, member_page=members.next_num) }}"
+                    class="px-2 py-1 border hover:font-bold">Next</a>
+                {% else %}
+                <button disabled class="px-2 py-1 border hover:font-bold">Next</button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
