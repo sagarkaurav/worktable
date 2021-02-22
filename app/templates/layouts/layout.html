@@ -13,7 +13,23 @@
         {% include 'layouts/partials/nav.html' %}
         {% block content %}
         {% endblock content %}
+        {% if current_user.is_authenticated %}
+            <div class="absolute flex flex-col mx-auto space-y-2 w-80 md:top-24 md:right-24"> 
+                {% include 'layouts/partials/notifications.html' %}
+            </div>
+        {% endif %}
+
     </div>
+    <script>
+        window.addEventListener('load', function(){
+            let notifyCloseBtns = document.getElementsByClassName('notify-close');
+            for(let i =0; i< notifyCloseBtns.length; i++) {
+                notifyCloseBtns[i].addEventListener('click', function(){
+                    this.remove()
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

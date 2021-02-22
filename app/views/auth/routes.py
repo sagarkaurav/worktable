@@ -23,12 +23,12 @@ def login(org_username=None):
         password = member_login_form.password.data
         member = Member.query.filter_by(email=email, organization=org).first()
         if member is None:
-            flash("Account not found")
+            flash("Account not found", "error")
         elif not member.verify_password(password):
-            flash("username or password is invalid")
+            flash("username or password is invalid", "error")
         else:
             login_user(member)
-            flash("login successfully")
+            flash("login successfully", "success")
             return redirect(url_for("dashboard.index", org_username=org_username))
     return render_template(
         "auth/login.html", form=member_login_form, org_username=org_username
@@ -43,7 +43,7 @@ def select():
             username=select_org_form.username.data
         ).first()
         if org is None:
-            flash("Organization not found")
+            flash("Organization not found", "error")
         else:
             return redirect(url_for("auth.login", org_username=org.username))
 
@@ -53,10 +53,10 @@ def select():
 @auth.route("/logout/", subdomain="<org_username>")
 def logout(org_username):
     if current_user.is_authenticated:
-        flash("Logged out successfully")
+        flash("Logged out successfully", "success")
         org_username = current_user.organization.username
         logout_user()
         return redirect(url_for("auth.login", org_username=org_username))
     else:
-        flash("You are not logged in")
+        flash("You are not logged in", "warning")
         return redirect(url_for("auth.select"))

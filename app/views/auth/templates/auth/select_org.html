@@ -3,15 +3,9 @@
 <form method="POST" action="{{ url_for('auth.select') }}">
     {{ form.csrf_token}}
     <div class="max-w-lg p-8 mx-auto mt-24 rounded-lg shadow-md bg-gray-50">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-        {% for category, message in messages %}
-        <div class="w-full px-4 py-2 text-center text-gray-100 bg-red-400 rounded shadow-sm">
-            <p>{{message}}</p>
+        <div class="p-2">
+            {% include 'layouts/partials/notifications.html' %}
         </div>
-        {% endfor %}
-        {% endif %}
-        {% endwith %}
         <div class="grid grid-cols-1 gap-6">
             <label class="block">
                 <span class="text-sm text-gray-700">{{ form.username.label.name }}</span>

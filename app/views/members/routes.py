@@ -28,7 +28,7 @@ def invite(org_username):
             email=email, organization=current_user.organization
         ).first()
         if member:
-            flash("Email is alreay a member")
+            flash("Email is alreay a member", "error")
         new_invite = MemberInvite(email=email, organization=current_user.organization)
         db.session.add(new_invite)
         db.session.commit()
@@ -43,7 +43,7 @@ def invite(org_username):
 def join(org_username, token):
     invite = MemberInvite.query.filter_by(token=token).first()
     if not invite:
-        flash("Invalid invite link")
+        flash("Invalid invite link", "error")
         return redirect(
             url_for(
                 "members.join", token=token, org_username=invite.organization.username

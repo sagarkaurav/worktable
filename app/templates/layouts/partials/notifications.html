@@ -1,0 +1,13 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            {% if category == "success" %}
+                {% include 'layouts/partials/notify_success.html' %}
+            {% elif category == "error" %}
+                {% include 'layouts/partials/notify_error.html' %}
+            {% elif category == "warning" %}
+                {% include 'layouts/partials/notify_warning.html' %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
