@@ -19,3 +19,7 @@ class EditProject(FlaskForm):
 
 class CreateComment(FlaskForm):
     description = HiddenField("New comment", validators=[DataRequired()])
+
+
+class EditComment(FlaskForm):
+    description = HiddenField("New comment", validators=[DataRequired()])
