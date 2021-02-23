@@ -25,9 +25,9 @@
                         member</button>
                 </div>
                 {% if project.updated_at %}
-                <div class="text-xs text-gray-500">last modified {{ project.updated_at }}</div>
+                <div class="text-xs text-gray-500">last modified {{ project.updated_at.strftime("%d/%m/%Y") }}</div>
                 {% else %}
-                <div class="text-xs text-gray-500">Created at {{ project.created_at }}</div>
+                <div class="text-xs text-gray-500">Created at {{ project.created_at.strftime("%d/%m/%Y") }}</div>
                 {% endif %}
             </div>
         </div>
@@ -54,7 +54,7 @@
                                         alt="avatar" />
                                     <p class="font-semibold">{{ comment.owner.first_name }} {{ comment.owner.last_name }}</p>
                                 </div>
-                                <div class="text-xs text-gray-500">{{ comment.created_at }}</div>
+                                <div class="text-xs text-gray-500">{{ comment.created_at.strftime("%d/%m/%Y") }}</div>
                             </div>
                             <div id="comment-editor">
                             </div>
@@ -84,7 +84,7 @@
                                     alt="avatar" />
                                 <p class="font-semibold">{{ comment.owner.first_name }} {{ comment.owner.last_name }}</p>
                             </div>
-                            <div class="text-xs text-gray-500">{{ comment.created_at }}</div>
+                            <div class="text-xs text-gray-500">{{ comment.created_at.strftime("%d/%m/%Y") }}</div>
                         </div>
                         <div id="{{comment.public_id}}" data-description='{{comment.description | safe}}' class="mt-4 comments">
                         </div>
