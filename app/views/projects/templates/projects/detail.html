@@ -3,7 +3,17 @@
 <div class="justify-center lg:flex">
     <div class="flex-grow max-w-3xl px-12 py-8">
         <div class="p-4 rounded-lg bg-gray-50">
-            <h1 class="py-4 text-2xl font-bold text-center">{{ project.name }}</h1>
+            <div class="relative flex justify-end">
+                <svg class="h-6 text-gray-500 menu-toggle hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                </svg>
+                <div class="absolute hidden p-4 mx-auto -mr-8 rounded-lg shadow-md bg-gray-50 top-4">
+                    <ul>
+                        <li><a class="px-4 text-green-400 hover:text-green-900" href="{{ url_for('projects.edit', org_username=current_user.organization.username, project_id=project.public_id) }}">Edit</a></li>
+                    </ul>
+                </div>
+              </div>
+            <h1 class="py-4 text-2xl font-bold">{{ project.name }}</h1>
             <div id="editorjs" class="mt-4">
             </div>
             <div class="flex items-center justify-between mt-8">
@@ -95,4 +105,20 @@
         });
     }
 </script>
+<script>
+    window.addEventListener('load', function(){
+      let menuToggles  = document.getElementsByClassName('menu-toggle');
+      for(let i =0;i<menuToggles.length;  i++){
+        menuToggles[i].addEventListener('click', function(){
+          let menu = this.nextElementSibling;
+          if(menu.classList.contains('hidden')){
+            menu.classList.remove('hidden');
+          }
+          else {
+            menu.classList.add('hidden');
+          }
+        });
+      }
+    });
+  </script>
 {% endblock content %}

@@ -1,9 +1,9 @@
 from app import db
 from app.models import MemberProject, Project
-from flask import Blueprint, abort, redirect, render_template, url_for
+from flask import Blueprint, abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
-from .forms import CreateComment, CreateProject
+from .forms import CreateComment, CreateProject, EditProject
 
 projects = Blueprint("projects", __name__, template_folder="templates")
 
@@ -26,6 +26,31 @@ def create(org_username):
             url_for(".detail", project_id=project.public_id, org_username=org_username)
         )
     return render_template("projects/create.html", form=new_project)
+
+
+@projects.route(
+    "/<project_id>/edit/", subdomain="<org_username>", methods=["GET", "POST"]
+)
+@login_required
+def edit(org_username, project_id):
+    project = (
+        Project.query.filter(Project.members.any(id=current_user.id))
+        .filter_by(public_id=project_id, project_id=None)
+        .first()
+    )
+    if project is None:
+        abort(404)
+    edit_project_form = EditProject(name=project.name, description=project.description)
+    if edit_project_form.validate_on_submit():
+        project.name = edit_project_form.name.data
+        project.description = edit_project_form.description.data
+        project.last_updated_by_id = current_user.id
+        db.session.commit()
+        flash("Project has been edited successfully", "success")
+        return redirect(
+            url_for(".detail", project_id=project.public_id, org_username=org_username)
+        )
+    return render_template("projects/edit.html", project=project, form=edit_project_form)
 
 
 @projects.route("/<project_id>/", subdomain="<org_username>", methods=["GET", "POST"])
