@@ -1,14 +1,22 @@
-<div class="flex items-center justify-between mb-4">
+<div class="flex items-center justify-between mb-4 md:px-16">
     {% if current_user.is_authenticated %}
-    <a href="{{ url_for('dashboard.index', org_username=current_user.organization.username)}}" class="text-2xl font-bold hover:text-blue-gray-500">Worktable</a>
+    <div class="flex items-center flex-grow">
+        <a href="{{ url_for('dashboard.index', org_username=current_user.organization.username)}}" class="text-xl font-bold sm:text-2xl hover:text-blue-gray-500">Worktable</a>
+        <div class="ml-24 space-x-4">
+            <a href="{{url_for('members.index', org_username=current_user.organization.username) }}"
+                class="text-sm font-bold hover:underline hover:text-blue-gray-500">Members</a>
+            <a href="{{url_for('profile.index', org_username=current_user.organization.username) }}"
+                class="text-sm font-bold hover:underline hover:text-blue-gray-500">profile</a>
+        </div>
+    </div>
     <div class="space-x-8">
         <a href="{{url_for('auth.logout', org_username=current_user.organization.username) }}"
-            class="text-lg font-bold hover:underline hover:text-blue-gray-500">logout</a>
+            class="text-sm font-bold sm:text-lg hover:underline hover:text-blue-gray-500">logout</a>
     </div>
     {% else %}
-    <a href="{{ url_for('home.index')}}" class="text-2xl font-bold hover:text-blue-gray-500">Worktable</a>
-    <div class="space-x-8">
-        <a href="{{url_for('auth.login')}}" class="text-lg font-bold hover:underline hover:text-blue-gray-500">Login</a>
+    <a href="{{ url_for('home.index')}}" class="text-lg font-bold sm:text-2xl hover:text-blue-gray-500">Worktable</a>
+    <div class="space-x-2 md:space-x-8">
+        <a href="{{url_for('auth.login')}}" class="text-sm font-bold sm:text-lg hover:underline hover:text-blue-gray-500">Login</a>
         <a href="#"
             class="px-8 py-2 font-bold tracking-wide text-white bg-green-400 rounded-md shadow-lg hover:bg-green-500">Signup</a>
     </div>

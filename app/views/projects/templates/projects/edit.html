@@ -4,32 +4,30 @@
     method="POST">
     {{ form.csrf_token}}
 
-    <div class="px-12 py-8">
-        <div class="max-w-3xl p-4 mx-auto rounded-lg shadow-sm bg-gray-50">
-            <label class="block px-3 mb-6">
-                <span class="block mb-2 ml-2 font-bold text-blue-gray-600">{{ form.name.label.name }}</span>
-                {% if form.name.errors %}
-                {{form.name(class="w-full border-2 border-red-300 rounded-lg", autofocus=true,
-                placeholder="New project")}}
+    <div class="max-w-3xl p-4 mx-auto rounded-lg shadow-sm bg-gray-50">
+        <label class="block px-3 mb-6">
+            <span class="block mb-2 ml-2 font-bold text-blue-gray-600">{{ form.name.label.name }}</span>
+            {% if form.name.errors %}
+            {{form.name(class="w-full border-2 border-red-300 rounded-lg", autofocus=true,
+            placeholder="New project")}}
 
-                {% for error in form.name.errors %}
-                <p class="text-xs font-bold text-red-400">{{error}}</p>
-                {% endfor %}
-                {% else %}
-                {{form.name(class="w-full border-2 border-gray-300 rounded-lg", autofocus=true,
-                placeholder="New project")}}
-                {% endif %}
-            </label>
-            {{ form.description(id="description-data") }}
-            <div id="editorjs" class="px-5 mb-8">
-            </div>
-            {% for error in form.description.errors %}
+            {% for error in form.name.errors %}
             <p class="text-xs font-bold text-red-400">{{error}}</p>
             {% endfor %}
-            <div class="flex">
-                <button type="button" id="publish-btn"
-                    class="px-4 py-2 mx-auto font-bold text-white bg-green-500 rounded-lg">Save changes</button>
-            </div>
+            {% else %}
+            {{form.name(class="w-full border-2 border-gray-300 rounded-lg", autofocus=true,
+            placeholder="New project")}}
+            {% endif %}
+        </label>
+        {{ form.description(id="description-data") }}
+        <div id="editorjs" class="px-5 mb-8">
+        </div>
+        {% for error in form.description.errors %}
+        <p class="text-xs font-bold text-red-400">{{error}}</p>
+        {% endfor %}
+        <div class="flex">
+            <button type="button" id="publish-btn"
+                class="px-4 py-2 mx-auto font-bold text-white bg-green-500 rounded-lg">Save changes</button>
         </div>
     </div>
 </form>

@@ -9,10 +9,12 @@
 </head>
 
 <body>
-    <div class="min-h-screen p-8 bg-blue-50">
+    <div class="min-h-screen p-4 md:p-8 bg-blue-50">
         {% include 'layouts/partials/nav.html' %}
-        {% block content %}
-        {% endblock content %}
+        <div class="py-8 md:px-12">
+            {% block content %}
+            {% endblock content %}
+        </div>
         {% if current_user.is_authenticated %}
             <div class="absolute flex flex-col mx-auto space-y-2 w-80 md:top-24 md:right-24"> 
                 {% include 'layouts/partials/notifications.html' %}
