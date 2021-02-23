@@ -26,6 +26,8 @@ def login(org_username=None):
             flash("Account not found", "error")
         elif not member.verify_password(password):
             flash("username or password is invalid", "error")
+        elif member.disabled_at:
+            flash("You account has been disabled. Please contact admin", "error")
         else:
             login_user(member)
             flash("login successfully", "success")

@@ -1,5 +1,5 @@
-from flask import Flask
-from flask_login import LoginManager
+from flask import Flask, flash, redirect, url_for
+from flask_login import LoginManager, current_user, logout_user
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
@@ -30,5 +30,15 @@ def create_app(config="app.config.ProductionConfig"):
     @login_manager.user_loader
     def load_user(user_id):
         return Member.query.get(user_id)
+
+    @app.before_request
+    def bar():
+        if current_user.is_authenticated and current_user.disabled_at is not None:
+            redirect_url = url_for(
+                "auth.login", org_username=current_user.organization.username
+            )
+            logout_user()
+            flash("You account has been disabled", "error")
+            return redirect(redirect_url)
 
     return app

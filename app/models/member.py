@@ -12,7 +12,6 @@ class Member(UserMixin, db.Model):
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     email = db.Column(db.String(255), nullable=False)
-    # username = db.Column(db.String(80), nullable=False)
     _password = db.Column("password", db.String(255), nullable=False)
     email_verified_at = db.Column(db.DateTime, nullable=True)
     organization_id = db.Column(
@@ -25,6 +24,7 @@ class Member(UserMixin, db.Model):
     )
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, nullable=True)
+    disabled_at = db.Column(db.DateTime, nullable=True)
     __table_args__ = (
         db.UniqueConstraint(
             "email", "organization_id", name="members_email_organization_id_uniq_const"

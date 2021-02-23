@@ -37,4 +37,20 @@
         </div>
     </div>
 </div>
+<script>
+    window.addEventListener('load', function(){
+      let menuToggles  = document.getElementsByClassName('menu-toggle');
+      for(let i =0;i<menuToggles.length;  i++){
+        menuToggles[i].addEventListener('click', function(){
+          let menu = this.nextElementSibling;
+          if(menu.classList.contains('hidden')){
+            menu.classList.remove('hidden');
+          }
+          else {
+            menu.classList.add('hidden');
+          }
+        });
+      }
+    });
+  </script>
 {% endblock content %}

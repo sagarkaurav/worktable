@@ -1,3 +1,5 @@
+import datetime
+
 from app import db
 from app.models import Member, MemberInvite
 from flask import Blueprint, flash, redirect, render_template, request, url_for
@@ -69,3 +71,45 @@ def join(org_username, token):
     return render_template(
         "members/join.html", invite=invite, form=member_join, token=token
     )
+
+
+@members.route("/disable/", subdomain="<org_username>", methods=["POST"])
+@login_required
+def disable_account(org_username):
+    member_id = request.form.get("member_id")
+    member = Member.query.filter_by(
+        id=member_id, organization=current_user.organization
+    ).first()
+    if member is None:
+        flash("Member account is not found", "error")
+    elif member.disabled_at:
+        flash("Member account is already disabled", "error")
+    elif member == current_user:
+        flash("You can not disabled your own account", "error")
+    else:
+        member.disabled_at = datetime.datetime.utcnow()
+        db.session.commit()
+        flash("Member account has been disabled", "success")
+    redirect_url = url_for(".index", org_username=current_user.organization.username)
+    return redirect(redirect_url)
+
+
+@members.route("/enable/", subdomain="<org_username>", methods=["POST"])
+@login_required
+def enable_account(org_username):
+    member_id = request.form.get("member_id")
+    member = Member.query.filter_by(
+        id=member_id, organization=current_user.organization
+    ).first()
+    if member is None:
+        flash("Member account is not found", "error")
+    elif member.disabled_at is None:
+        flash("Member account is already enabled", "error")
+    elif member == current_user:
+        flash("You can not enable your own account", "error")
+    else:
+        member.disabled_at = None
+        db.session.commit()
+        flash("Member account has been enabled", "success")
+    redirect_url = url_for(".index", org_username=current_user.organization.username)
+    return redirect(redirect_url)
