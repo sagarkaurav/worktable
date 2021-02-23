@@ -19,6 +19,7 @@ def create_app(config="app.config.ProductionConfig"):
     from app.views.dashboard import dashboard
     from app.views.home import home
     from app.views.members import members
+    from app.views.profile import profile
     from app.views.projects import projects
 
     app.register_blueprint(home)
@@ -26,6 +27,7 @@ def create_app(config="app.config.ProductionConfig"):
     app.register_blueprint(dashboard, url_prefix="/dashboard")
     app.register_blueprint(projects, url_prefix="/projects")
     app.register_blueprint(members, url_prefix="/members")
+    app.register_blueprint(profile, url_prefix="/profile")
 
     @login_manager.user_loader
     def load_user(user_id):
