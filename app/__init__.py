@@ -21,6 +21,7 @@ def create_app(config="app.config.ProductionConfig"):
     from app.views.members import members
     from app.views.profile import profile
     from app.views.projects import projects
+    from app.views.reset_passwords import reset_passwords
 
     app.register_blueprint(home)
     app.register_blueprint(auth, url_prefix="/organizations")
@@ -28,6 +29,7 @@ def create_app(config="app.config.ProductionConfig"):
     app.register_blueprint(projects, url_prefix="/projects")
     app.register_blueprint(members, url_prefix="/members")
     app.register_blueprint(profile, url_prefix="/profile")
+    app.register_blueprint(reset_passwords, url_prefix="/reset-passwords")
 
     @login_manager.user_loader
     def load_user(user_id):
