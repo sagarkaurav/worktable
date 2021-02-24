@@ -21,7 +21,7 @@ class MemberInvite(db.Model):
         unique=True,
     )
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=True)
+    updated_at = db.Column(db.DateTime, nullable=True, onupdate=datetime.utcnow)
     __table_args__ = (
         db.UniqueConstraint(
             "email",

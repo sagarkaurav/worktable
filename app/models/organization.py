@@ -9,4 +9,4 @@ class Organization(db.Model):
     name = db.Column(db.String(255), nullable=False)
     username = db.Column(db.String(80), nullable=False, unique=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=True)
+    updated_at = db.Column(db.DateTime, nullable=True, onupdate=datetime.utcnow)

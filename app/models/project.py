@@ -43,4 +43,4 @@ class Project(db.Model):
                 return member
 
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=True)
+    updated_at = db.Column(db.DateTime, nullable=True, onupdate=datetime.utcnow)

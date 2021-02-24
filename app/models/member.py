@@ -27,7 +27,7 @@ class Member(UserMixin, db.Model):
     reset_password_token_created_at = db.Column(db.DateTime, nullable=True)
     reset_password_token_valid_for = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=True)
+    updated_at = db.Column(db.DateTime, nullable=True, onupdate=datetime.utcnow)
     disabled_at = db.Column(db.DateTime, nullable=True)
     __table_args__ = (
         db.UniqueConstraint(

@@ -10,7 +10,7 @@ class MemberProject(db.Model):
     member = db.relationship("Member", backref=db.backref("permissions"))
     project_id = db.Column(db.Integer, db.ForeignKey("projects.id", ondelete="CASCADE"))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, nullable=True)
+    updated_at = db.Column(db.DateTime, nullable=True, onupdate=datetime.utcnow)
     __table_args__ = (
         db.UniqueConstraint(
             "member_id",
