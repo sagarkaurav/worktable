@@ -1,9 +1,9 @@
 from app import db
-from app.models import MemberProject, Project
+from app.models import Member, MemberProject, Project
 from flask import Blueprint, abort, flash, redirect, render_template, url_for
 from flask_login import current_user, login_required
 
-from .forms import CreateComment, CreateProject, EditComment, EditProject
+from .forms import AddMemberForm, CreateComment, CreateProject, EditComment, EditProject
 
 projects = Blueprint("projects", __name__, template_folder="templates")
 
@@ -66,6 +66,10 @@ def detail(org_username, project_id):
     if project is None:
         abort(404)
     new_comment = CreateComment()
+    add_members_form = AddMemberForm()
+    for member in current_user.organization.members:
+        if member not in project.members:
+            add_members_form.members.choices.append((member.id, member.email))
     if new_comment.validate_on_submit():
         comment = Project(
             description=new_comment.description.data,
@@ -77,9 +81,18 @@ def detail(org_username, project_id):
         db.session.add(comment)
         db.session.commit()
         return redirect(
-            url_for(".detail", org_username=org_username, project_id=project_id)
+            url_for(
+                ".detail",
+                org_username=org_username,
+                project_id=project_id,
+            )
         )
-    return render_template("projects/detail.html", project=project, form=new_comment)
+    return render_template(
+        "projects/detail.html",
+        add_members_form=add_members_form,
+        project=project,
+        form=new_comment,
+    )
 
 
 @projects.route(
@@ -123,4 +136,80 @@ def edit_comment(org_username, project_id, comment_id):
         project=project,
         edit_comment=comment,
         form=edit_comment,
+    )
+
+
+@projects.route(
+    "/<project_id>/members/<member_id>/remove/",
+    subdomain="<org_username>",
+    methods=["POST"],
+)
+@login_required
+def member_remove(org_username, project_id, member_id):
+    project = (
+        Project.query.filter(Project.members.any(id=current_user.id))
+        .filter_by(public_id=project_id, project_id=None)
+        .first()
+    )
+    if project is None:
+        abort(404)
+    member = Member.query.get(member_id)
+    if member not in project.members:
+        flash("Member is not part of this project", "error")
+    elif member == current_user:
+        flash("You can not remove yourself from the project", "error")
+    else:
+        project.members.remove(member)
+        db.session.commit()
+        flash("Member has been remove from the project", "success")
+    return redirect(
+        url_for(
+            ".detail",
+            project_id=project.public_id,
+            org_username=current_user.organization.username,
+        )
+    )
+
+
+@projects.route(
+    "/<project_id>/members/",
+    subdomain="<org_username>",
+    methods=["POST"],
+)
+@login_required
+def member_add(org_username, project_id):
+    project = (
+        Project.query.filter(Project.members.any(id=current_user.id))
+        .filter_by(public_id=project_id, project_id=None)
+        .first()
+    )
+    if project is None:
+        abort(404)
+    add_members_form = AddMemberForm()
+    for member in current_user.organization.members:
+        if member not in project.members:
+            add_members_form.members.choices.append((member.id, member.email))
+    if add_members_form.validate_on_submit():
+        new_members = add_members_form.members.data
+        if len(new_members) == 0:
+            flash("Please select member(s) to add ", "warning")
+        else:
+            for new_member_id in new_members:
+                member = Member.query.filter_by(
+                    id=new_member_id, organization=current_user.organization
+                ).first()
+                if member:
+                    db.session.add(
+                        MemberProject(project_id=project.id, member_id=member.id)
+                    )
+            db.session.commit()
+            flash("New member(s) has been added to project", "success")
+    else:
+        flash("Something went wrong please try again", "error")
+    return redirect(
+        url_for(
+            ".detail",
+            project_id=project.public_id,
+            org_username=current_user.organization.username,
+        )
     )

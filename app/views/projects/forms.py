@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import HiddenField, StringField
+from wtforms import HiddenField, SelectMultipleField, StringField
 from wtforms.validators import DataRequired, Length
 
 
@@ -23,3 +23,7 @@ class CreateComment(FlaskForm):
 
 class EditComment(FlaskForm):
     description = HiddenField("New comment", validators=[DataRequired()])
+
+
+class AddMemberForm(FlaskForm):
+    members = SelectMultipleField("Add members", coerce=int, choices=[])
