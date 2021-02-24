@@ -1,6 +1,7 @@
-from app import db
+from app import db, mail
 from app.models import Member, Organization
 from flask import Blueprint, abort, flash, redirect, render_template, url_for
+from flask_mail import Message
 
 from .forms import RequestResetPassForm, ResetPassForm
 
@@ -21,10 +22,25 @@ def index(org_username):
             return redirect(url_for(".index", org_username=org.username))
         token = member.create_reset_password_token()
         db.session.commit()
-        print(token)
+        reset_link = url_for(
+            ".reset", org_username=org.username, token=token, _external=True
+        )
+        msg = Message(
+            "Worktable reset password link",
+            sender="no-reply@example.com",
+            recipients=[member.email],
+        )
+        msg.body = render_template(
+            "reset_passwords/reset_password_mail.txt", link=reset_link
+        )
+        msg.html = render_template(
+            "reset_passwords/reset_password_mail.html", link=reset_link
+        )
+        mail.send(msg)
         flash(
             "Reset password instructions has been sent to your email address", "success"
         )
+
         return redirect(url_for("auth.login", org_username=org.username))
 
     return render_template(
