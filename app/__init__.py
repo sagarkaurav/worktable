@@ -1,10 +1,12 @@
 from flask import Flask, flash, redirect, url_for
 from flask_login import LoginManager, current_user, logout_user
+from flask_mail import Mail
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 migrate = Migrate()
+mail = Mail()
 
 
 def create_app(config="app.config.ProductionConfig"):
@@ -14,6 +16,7 @@ def create_app(config="app.config.ProductionConfig"):
     login_manager.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db, directory="app/db/migrations", compare_type=True)
+    mail.init_app(app)
     from app.models import Member, MemberInvite, MemberProject, Organization, Project
     from app.views.auth import auth
     from app.views.dashboard import dashboard

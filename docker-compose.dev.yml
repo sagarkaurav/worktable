@@ -31,5 +31,10 @@ services:
       - worktable-db:/var/lib/postgresql/data
     ports: 
       - "5001:5432"
+  mailserver:
+    image: maildev/maildev
+    ports:
+      - "1080:80"
+      - "1025:25"
 volumes: 
   worktable-db:
