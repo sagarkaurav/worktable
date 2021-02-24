@@ -23,7 +23,7 @@
       </div>
     </div>
     <div class="flex flex-col items-center">
-      <img class="w-12 h-12 rounded-full" src="https://pbs.twimg.com/profile_images/1205060168423100422/7CdEj_dt_400x400.jpg" alt="avatar" />
+      <img class="w-12 h-12 rounded-full" src="{{ url_for('static', filename='public/img/default_avatar.svg') }}" alt="avatar" />
       <p class="font-semibold">{{member.first_name}} {{ member.last_name }}
         {% if member.disabled_at %}
         <span class="p-1 text-xs text-red-800 bg-red-300 rounded-lg">Disabled</span>

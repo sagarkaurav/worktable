@@ -19,7 +19,7 @@
             <div class="flex items-center justify-between p-4 mt-8 rounded-b-lg bg-blue-gray-100">
                 <div class="flex items-center">
                     <img class="w-8 h-8 rounded-full"
-                        src="https://pbs.twimg.com/profile_images/1205060168423100422/7CdEj_dt_400x400.jpg"
+                        src="{{ url_for('static', filename='public/img/default_avatar.svg') }}"
                         alt="avatar" />
                     <a href="#add-member-form" class="ml-2 text-xs text-gray-400 hover:font-bold hover:text-gray-600">Manage members</a>
                 </div>
@@ -40,7 +40,7 @@
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center">
                                         <img class="w-8 h-8 rounded-full"
-                                            src="https://pbs.twimg.com/profile_images/1205060168423100422/7CdEj_dt_400x400.jpg"
+                                            src="{{ url_for('static', filename='public/img/default_avatar.svg') }}"
                                             alt="avatar" />
                                         <p class="px-2 text-sm font-semibold text-gray-600">{{ comment.owner.first_name }} {{ comment.owner.last_name }}</p>
                                     </div>
@@ -74,7 +74,7 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center">
                                 <img class="w-8 h-8 rounded-full"
-                                    src="https://pbs.twimg.com/profile_images/1205060168423100422/7CdEj_dt_400x400.jpg"
+                                    src="{{ url_for('static', filename='public/img/default_avatar.svg') }}"
                                     alt="avatar" />
                                 <p class="px-2 text-sm font-semibold text-gray-600">{{ comment.owner.first_name }} {{ comment.owner.last_name }}</p>
                             </div>
