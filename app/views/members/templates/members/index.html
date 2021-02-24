@@ -1,6 +1,6 @@
 {% extends 'layouts/layout.html' %}
 {% block content %}
-  <div class="p-4 rounded-lg bg-gray-50">
+  <div class="p-4 rounded-lg shadow-md bg-gray-50">
       <svg class="w-16 h-16 p-4 mx-auto -mt-10 text-green-500 rounded-full bg-gray-50"
           xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -12,12 +12,12 @@
               Member</a>
           <h6 class="pb-4 text-xl font-bold text-center">Members</h6>
       </div>
-      <div class="grid grid-cols-1 gap-4 mb-4 text-sm md:grid-cols-2 lg:grid-cols-4">
+      <div class="grid grid-cols-1 gap-4 mt-6 mb-4 text-sm md:grid-cols-2 lg:grid-cols-4">
           {% for member in members.items %}
           {% include 'members/partials/member.html' %}
           {% endfor %}
       </div>
-      <div class="flex items-center justify-end mt-4">
+      <div class="flex items-center justify-end p-4 mt-8 -m-4 rounded-b-lg bg-blue-gray-100">
           <div class="flex items-center">
               <p class="mr-2 text-sm text-gray-500">showing page {{ members.page }} of {{ members.pages }}</p>
               {% if members.has_prev %}

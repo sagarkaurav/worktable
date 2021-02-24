@@ -13,6 +13,6 @@ def index(org_username):
         Project.query.filter(Project.permissions.any(member=current_user))
         .filter_by(project_id=None)
         .order_by(Project.id.desc())
-        .paginate(int(page), 3)
+        .paginate(int(page), 5)
     )
     return render_template("dashboard/index.html", projects=projects)
