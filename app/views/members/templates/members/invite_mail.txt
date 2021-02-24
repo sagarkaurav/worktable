@@ -1,0 +1,2 @@
+Your have been invited to join {{ org_name }} on Worktable. Please click link below to join.
+{{ join_link }}

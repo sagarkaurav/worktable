@@ -1,9 +1,10 @@
 import datetime
 
-from app import db
+from app import db, mail
 from app.models import Member, MemberInvite
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user
+from flask_mail import Message
 
 from .forms import MemberInviteForm, MemberJoinForm
 
@@ -34,6 +35,29 @@ def invite(org_username):
         new_invite = MemberInvite(email=email, organization=current_user.organization)
         db.session.add(new_invite)
         db.session.commit()
+        invite_link = url_for(
+            ".join",
+            org_username=current_user.organization.username,
+            token=new_invite.token,
+            _external=True,
+        )
+        msg = Message(
+            "Worktable organization join invite",
+            sender="no-reply@example.com",
+            recipients=[new_invite.email],
+        )
+        msg.body = render_template(
+            "members/invite_mail.txt",
+            join_link=invite_link,
+            org_name=current_user.organization.name,
+        )
+        msg.html = render_template(
+            "members/invite_mail.html",
+            join_link=invite_link,
+            org_name=current_user.organization.name,
+        )
+        mail.send(msg)
+
         flash("New member invite has been sent", "success")
         return redirect(
             url_for("members.index", org_username=current_user.organization.username)
