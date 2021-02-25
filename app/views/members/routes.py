@@ -31,7 +31,25 @@ def invite(org_username):
             email=email, organization=current_user.organization
         ).first()
         if member:
-            flash("Email is alreay a member", "error")
+            flash("Email is already a member", "error")
+            return redirect(
+                url_for(
+                    "members.index",
+                    org_username=current_user.organization.username,
+                )
+            )
+        invite = MemberInvite.query.filter_by(
+            organization=current_user.organization, email=email
+        ).first()
+        if invite:
+            flash("Invite already sent.", "warning")
+            return redirect(
+                url_for(
+                    "members.index",
+                    org_username=current_user.organization.username,
+                )
+            )
+
         new_invite = MemberInvite(email=email, organization=current_user.organization)
         db.session.add(new_invite)
         db.session.commit()
@@ -85,8 +103,8 @@ def join(org_username, token):
         )
         new_member.password = member_join.password.data
         db.session.add(new_member)
-        db.session.commit()
         db.session.delete(invite)
+        db.session.commit()
         login_user(new_member)
         flash("New member invite has been sent", "success")
         return redirect(
