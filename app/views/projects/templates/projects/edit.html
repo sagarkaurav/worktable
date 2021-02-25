@@ -32,18 +32,32 @@
     </div>
 </form>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+
 <script>
     window.addEventListener('load', function () {
         let editor;
         {% if form.description.data %}
             editor = new EditorJS({
                 placeholder: 'Type project description here',
-                data: {{form.description.data | safe }}
+                data: {{form.description.data | safe }},
+                tools: {
+                    List: {
+                        class: List,
+                        inlineToolbar: true
+                    }
+                }
             });
         
         {%else%}
         editor = new EditorJS({
                 placeholder: 'Type project description here',
+                tools: {
+                    List: {
+                        class: List,
+                        inlineToolbar: true
+                    }
+                }
             });
         {%  endif %}
     let newPostForm = document.getElementById('new-post-form');

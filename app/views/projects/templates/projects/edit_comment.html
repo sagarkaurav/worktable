@@ -100,24 +100,43 @@
     </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
+<script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
 <script>
     let data = {{ project.description | safe }}
     const editor = new EditorJS({
         readOnly: true,
         data: data,
+        tools: {
+            List: {
+                class: List,
+                inlineToolbar: true
+            }
+        }
     });
     let commentEditor;
     {% if form.description.data %}
     commentEditor = new EditorJS({
             placeholder: 'Write new comment',
             data: {{form.description.data | safe }},
-            'holder': 'comment-editor'
+            'holder': 'comment-editor',
+            tools: {
+            List: {
+                class: List,
+                inlineToolbar: true
+            }
+        }
         });
     
     {%else%}
     commentEditor = new EditorJS({
             placeholder: 'Write new comment',
-            'holder': 'comment-editor'
+            'holder': 'comment-editor',
+            tools: {
+            List: {
+                class: List,
+                inlineToolbar: true
+            }
+        }
         });
     {%  endif %}
 
@@ -137,7 +156,13 @@
         new EditorJS({
             readOnly: true,
             data: JSON.parse(comments[i].getAttribute("data-description")),
-            holder: comments[i].getAttribute("id")
+            holder: comments[i].getAttribute("id"),
+            tools: {
+            List: {
+                class: List,
+                inlineToolbar: true
+            }
+        }
         });
     }
 </script>
