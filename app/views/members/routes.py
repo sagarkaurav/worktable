@@ -18,7 +18,34 @@ def index(org_username):
     members = Member.query.filter_by(organization=current_user.organization).paginate(
         int(member_page), 5
     )
-    return render_template("members/index.html", members=members)
+    all_invites = MemberInvite.query.filter_by(
+        organization=current_user.organization
+    ).all()
+    return render_template(
+        "members/index.html", all_invites=all_invites, members=members
+    )
+
+
+@members.route(
+    "/invite/<invite_id>/remove", subdomain="<org_username>", methods=["POST"]
+)
+@login_required
+def remove_invite(org_username, invite_id):
+    invite = MemberInvite.query.filter_by(
+        organization=current_user.organization, id=invite_id
+    ).first()
+    if invite is None:
+        flash("Unable to find invite to remove", "error")
+    else:
+        db.session.delete(invite)
+        db.session.commit()
+        flash("Invite removed successfully", "success")
+    return redirect(
+        url_for(
+            "members.index",
+            org_username=current_user.organization.username,
+        )
+    )
 
 
 @members.route("/invite/", subdomain="<org_username>", methods=["GET", "POST"])
@@ -88,11 +115,7 @@ def join(org_username, token):
     invite = MemberInvite.query.filter_by(token=token).first()
     if not invite:
         flash("Invalid invite link", "error")
-        return redirect(
-            url_for(
-                "members.join", token=token, org_username=invite.organization.username
-            )
-        )
+        return redirect(url_for("auth.login", org_username=org_username))
     member_join = MemberJoinForm()
     if member_join.validate_on_submit():
         new_member = Member(
