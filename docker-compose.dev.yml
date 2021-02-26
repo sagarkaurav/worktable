@@ -17,7 +17,7 @@ services:
     ports:
      - "5000:5000"
     entrypoint: ["./dev-entrypoint.sh"]
-    command: ["flask", "run", "--host", "0.0.0.0"]
+    command: ["/bin/sh", "-c", "while sleep 1000; do :; done"]
     depends_on:
       - db
   
