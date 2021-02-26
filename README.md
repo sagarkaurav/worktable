@@ -1,5 +1,4 @@
 # Worktable
-------
 Minimal Project mangement system
 
 ![](landing.png)
@@ -18,9 +17,11 @@ Minimal Project mangement system
 4. After docker compose setup is done  run `docker container exec -it worktable_app_1 /bin/bash` to get access into backend server. If you have changed the root directory name then the container name also get changed in that case container name will be `[root_dir_name]_app_1`
 5. run inside the backend server to start pipenv enviornment `pipenv shell`
 6. install backend dependencies `pipenv install`
-7. run inside the backend server  `flask db migrate` to setup database tables.
-8. run `flask run --host 0.0.0.0` inside the backend server to start backend service
-9. Access app at `http://localhost:5000`
+7. Install node dependencies `npm install`
+8. Build required asseets `npm run css:build:dev` 
+9. run inside the backend server  `flask db upgrade` to setup database tables.
+10. run `flask run --host 0.0.0.0` inside the backend server to start backend service
+11. Access app at `http://localhost:5000`
 
 > In development mode all the email sent by the backend server will be available at `http://localhost:1080`
 
