@@ -1,6 +1,6 @@
 from app import db, mail
 from app.models import MemberInvite, Organization
-from flask import Blueprint, flash, render_template, url_for
+from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_mail import Message
 
 from .forms import SignupForm
@@ -42,5 +42,6 @@ def index():
             org_name=org.name,
         )
         mail.send(msg)
-        flash("Confirmation link has been sent to admin email address")
+        flash("Confirmation link has been sent to admin email address", "success")
+        return redirect(url_for("auth.login", org_username=org.username))
     return render_template("signup/index.html", form=form)
