@@ -2,61 +2,10 @@
 {% block content %}
 <div class="justify-center lg:flex">
     <div class="flex-grow max-w-3xl">
-        <div class="mb-12 rounded-lg shadow-md bg-gray-50">
-            <div class="relative flex justify-end p-2">
-                <svg class="h-6 text-gray-300 menu-toggle hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                </svg>
-                <div class="absolute hidden p-4 mx-auto -mr-8 rounded-lg shadow-md bg-gray-50 top-8">
-                    <ul>
-                        <li><a class="px-4 text-green-400 hover:text-green-900" href="{{ url_for('projects.edit', org_username=current_user.organization.username, project_id=project.public_id) }}">Edit</a></li>
-                    </ul>
-                </div>
-              </div>
-            <h1 class="px-6 text-2xl font-bold text-gray-500">{{ project.name }}</h1>
-            <div id="editorjs" class="px-6 mt-4">
-            </div>
-            <div class="flex items-center justify-between p-4 mt-8 rounded-b-lg bg-blue-gray-100">
-                <div class="flex items-center">
-                    <img class="w-8 h-8 rounded-full"
-                        src="{{ url_for('static', filename='public/img/default_avatar.svg') }}"
-                        alt="avatar" />
-                    <a href="#add-member-form" class="ml-2 text-xs text-gray-400 hover:font-bold hover:text-gray-600">Manage members</a>
-                </div>
-                {% if project.updated_at %}
-                <div class="text-xs text-gray-500">last modified {{ project.updated_at.strftime("%d/%m/%Y") }}</div>
-                {% else %}
-                <div class="text-xs text-gray-500">Created at {{ project.created_at.strftime("%d/%m/%Y") }}</div>
-                {% endif %}
-            </div>
-        </div>
+        {% include 'projects/partials/project_detail.html' %}
         {% if project.comments %}
         {% for comment in project.comments %}
-        <div class="mb-8 rounded-lg shadow-md bg-gray-50">
-            <div class="relative flex items-center justify-between p-2 rounded-t-lg bg-blue-gray-100">
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <img class="w-8 h-8 rounded-full"
-                            src="{{ url_for('static', filename='public/img/default_avatar.svg') }}"
-                            alt="avatar" />
-                        <p class="px-2 text-sm font-semibold text-gray-600">{{ comment.owner.first_name }} {{ comment.owner.last_name }}</p>
-                    </div>
-                    <div class="text-xs text-gray-400">{{ comment.created_at.strftime("%d/%m/%Y") }}</div>
-                </div>
-                <div>
-                    <svg class="h-6 text-gray-300 menu-toggle hover:text-gray-900" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
-                    </svg>
-                    <div class="absolute hidden p-4 mx-auto -mr-8 rounded-lg shadow-md bg-gray-50 top-8">
-                        <ul>
-                            <li><a class="px-4 text-green-400 hover:text-green-900" href="{{ url_for('projects.edit_comment', org_username=current_user.organization.username, project_id=project.public_id, comment_id=comment.public_id) }}">Edit</a></li>
-                        </ul>
-                    </div>
-                </div>
-              </div>
-            <div id="{{comment.public_id}}" data-description='{{comment.description | safe}}' class="px-6 mt-4 comments">
-            </div>
-        </div>
+        {% include 'projects/partials/comment_detail.html' %}
         {% endfor %}
         {% endif %}
         <form id="new-comment-form" method="POST" action="{{url_for('.detail', org_username=current_user.organization.username, project_id=project.public_id)}}">
