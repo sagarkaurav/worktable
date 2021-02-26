@@ -37,7 +37,7 @@
             <div class="flex justify-around">
                 <a href="{{ url_for('auth.select') }}" class="text-xs text-gray-400 hover:text-gray-900">Change organization</a>
                 <a href="{{ url_for('resetpass.index', org_username=org_username) }}" class="text-xs text-gray-400 hover:text-gray-900">Forgot password</a>
-                <a href="#" class="text-xs text-gray-400 hover:text-gray-900">Create account</a>
+                <a href="{{ url_for('signup.index') }}" class="text-xs text-gray-400 hover:text-gray-900">Create account</a>
             </div>
         </div>
     </div>

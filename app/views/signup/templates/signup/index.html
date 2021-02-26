@@ -1,0 +1,58 @@
+{% extends 'layouts/layout.html' %}
+{% block content %}
+<form method="POST" action="{{ url_for('signup.index') }}">
+    {{ form.csrf_token}}
+    <div class="max-w-lg p-8 mx-auto mt-6 rounded-lg shadow-md bg-gray-50">
+        <div class="p-2">
+            {% include 'layouts/partials/notifications.html' %}
+        </div>
+        <div class="grid grid-cols-1 gap-6">
+            <label class="block">
+                <span class="text-sm text-gray-700">{{ form.organization_name.label }}</span>
+                {% if form.organization_name.errors %}
+                {{form.organization_name(class="block w-full mt-1 border-red-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50", autofocus=true, placeholder="Amce Corp")}}
+
+                {% for error in form.organization_name.errors %}
+                <p class="text-xs font-bold text-red-400">{{error}}</p>
+                {% endfor %}
+                {% else %}
+                {{form.organization_name(class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50", autofocus=true, placeholder="Amce Corp")}}
+                {% endif %}
+            </label>
+            <label class="block">
+                <span class="text-sm text-gray-700">{{ form.organization_username.label }}</span>
+                {% if form.organization_username.errors %}
+                {{form.organization_username(class="block w-full mt-1 border-red-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50", autofocus=true, placeholder="acme")}}
+                <p class="text-xs text-gray-400">Organization username will be used as your subdomain name</p>
+
+                {% for error in form.organization_username.errors %}
+                <p class="text-xs font-bold text-red-400">{{error}}</p>
+                {% endfor %}
+                {% else %}
+                {{form.organization_username(class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50", autofocus=true, placeholder="acme")}}
+                <p class="text-xs text-gray-400">Organization username will be used as your subdomain name</p>
+                {% endif %}
+            </label>
+            <label class="block">
+                <span class="text-sm text-gray-700">{{ form.admin_email.label }}</span>
+                {% if form.admin_email.errors %}
+                {{form.admin_email(class="block w-full mt-1 border-red-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50", autofocus=true, placeholder="john@acme.corp")}}
+
+                {% for error in form.admin_email.errors %}
+                <p class="text-xs font-bold text-red-400">{{error}}</p>
+                {% endfor %}
+                {% else %}
+                {{form.admin_email(class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50", autofocus=true, placeholder="john@acme.corp")}}
+                {% endif %}
+            </label>
+            <button
+                class="px-4 py-2 text-xl font-bold text-white rounded-lg shadow-lg col-span-full hover:bg-blue-gray-500 bg-blue-gray-400">Signup</button>
+            <hr />
+            <div class="flex justify-around">
+                <a href="{{ url_for('auth.select') }}" class="text-xs text-gray-400 hover:text-gray-900">Login</a>
+                <a href="{{ url_for('home.index') }}" class="text-xs text-gray-400 hover:text-gray-900">Go back</a>
+            </div>
+        </div>
+    </div>
+</form>
+{% endblock content %}
