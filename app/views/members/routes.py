@@ -8,10 +8,12 @@ from flask_mail import Message
 
 from .forms import MemberInviteForm, MemberJoinForm
 
-members = Blueprint("members", __name__, template_folder="templates")
+members = Blueprint(
+    "members", __name__, subdomain="<org_username>", template_folder="templates"
+)
 
 
-@members.route("/", subdomain="<org_username>")
+@members.route("/")
 @login_required
 def index(org_username):
     member_page = request.args.get("member_page", 1)
@@ -26,9 +28,7 @@ def index(org_username):
     )
 
 
-@members.route(
-    "/invite/<invite_id>/remove", subdomain="<org_username>", methods=["POST"]
-)
+@members.route("/invite/<invite_id>/remove", methods=["POST"])
 @login_required
 def remove_invite(org_username, invite_id):
     invite = MemberInvite.query.filter_by(
@@ -48,7 +48,7 @@ def remove_invite(org_username, invite_id):
     )
 
 
-@members.route("/invite/", subdomain="<org_username>", methods=["GET", "POST"])
+@members.route("/invite/", methods=["GET", "POST"])
 @login_required
 def invite(org_username):
     member_invite = MemberInviteForm()
@@ -110,7 +110,7 @@ def invite(org_username):
     return render_template("members/invite.html", form=member_invite)
 
 
-@members.route("/join/<token>", subdomain="<org_username>", methods=["GET", "POST"])
+@members.route("/join/<token>", methods=["GET", "POST"])
 def join(org_username, token):
     invite = MemberInvite.query.filter_by(token=token).first()
     if not invite:
@@ -138,7 +138,7 @@ def join(org_username, token):
     )
 
 
-@members.route("/disable/", subdomain="<org_username>", methods=["POST"])
+@members.route("/disable/", methods=["POST"])
 @login_required
 def disable_account(org_username):
     member_id = request.form.get("member_id")
@@ -159,7 +159,7 @@ def disable_account(org_username):
     return redirect(redirect_url)
 
 
-@members.route("/enable/", subdomain="<org_username>", methods=["POST"])
+@members.route("/enable/", methods=["POST"])
 @login_required
 def enable_account(org_username):
     member_id = request.form.get("member_id")

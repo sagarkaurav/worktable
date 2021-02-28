@@ -5,10 +5,12 @@ from flask_login import current_user, login_required
 
 from .forms import AddMemberForm, CreateComment, CreateProject, EditComment, EditProject
 
-projects = Blueprint("projects", __name__, template_folder="templates")
+projects = Blueprint(
+    "projects", __name__, subdomain="<org_username>", template_folder="templates"
+)
 
 
-@projects.route("/create/", subdomain="<org_username>", methods=["GET", "POST"])
+@projects.route("/create/", methods=["GET", "POST"])
 @login_required
 def create(org_username):
     new_project = CreateProject()
@@ -28,9 +30,7 @@ def create(org_username):
     return render_template("projects/create.html", form=new_project)
 
 
-@projects.route(
-    "/<project_id>/edit/", subdomain="<org_username>", methods=["GET", "POST"]
-)
+@projects.route("/<project_id>/edit/", methods=["GET", "POST"])
 @login_required
 def edit(org_username, project_id):
     project = (
@@ -55,7 +55,7 @@ def edit(org_username, project_id):
     )
 
 
-@projects.route("/<project_id>/", subdomain="<org_username>", methods=["GET", "POST"])
+@projects.route("/<project_id>/", methods=["GET", "POST"])
 @login_required
 def detail(org_username, project_id):
     project = (
@@ -95,11 +95,7 @@ def detail(org_username, project_id):
     )
 
 
-@projects.route(
-    "/<project_id>/comments/<comment_id>/edit/",
-    subdomain="<org_username>",
-    methods=["GET", "POST"],
-)
+@projects.route("/<project_id>/comments/<comment_id>/edit/", methods=["GET", "POST"])
 @login_required
 def edit_comment(org_username, project_id, comment_id):
     project = (
@@ -139,11 +135,7 @@ def edit_comment(org_username, project_id, comment_id):
     )
 
 
-@projects.route(
-    "/<project_id>/members/<member_id>/remove/",
-    subdomain="<org_username>",
-    methods=["POST"],
-)
+@projects.route("/<project_id>/members/<member_id>/remove/", methods=["POST"])
 @login_required
 def member_remove(org_username, project_id, member_id):
     project = (
@@ -171,11 +163,7 @@ def member_remove(org_username, project_id, member_id):
     )
 
 
-@projects.route(
-    "/<project_id>/members/",
-    subdomain="<org_username>",
-    methods=["POST"],
-)
+@projects.route("/<project_id>/members/", methods=["POST"])
 @login_required
 def member_add(org_username, project_id):
     project = (
